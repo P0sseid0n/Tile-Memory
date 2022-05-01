@@ -46,7 +46,20 @@ interface Types {
 	time: number
 	timeInterval: number
 	screen: 'game' | 'menu'
+	life: number
+	maxLife: number
 }
+
+/*
+   Facil
+   - maxLife: 5
+
+   Médio
+   - maxLife: 3
+
+   Dificil
+   - maxLife: 2
+*/
 
 function getTrueQttBoard(board: Tile[][]) {
 	let qtt = 0
@@ -76,6 +89,8 @@ export const useGameStore = defineStore({
 		time: 0,
 		timeInterval: 0,
 		screen: 'game',
+		life: 3,
+		maxLife: 3,
 	}),
 	actions: {
 		toggleTheme() {
@@ -85,6 +100,7 @@ export const useGameStore = defineStore({
 			return (this.paused = !this.paused)
 		},
 		startGame() {
+			this.life = this.maxLife
 			this.time = 0
 			this.tileActiveColor = colors[Math.floor(Math.random() * colors.length)]
 			this.canPlay = false
@@ -128,7 +144,7 @@ export const useGameStore = defineStore({
 				this.timeInterval = setInterval(() => {
 					if (this.paused) return
 
-					if (this.time <= 0) return
+					if (this.time <= 0) return this.decreaseLife()
 
 					this.time -= 1
 				}, 1000)
@@ -141,8 +157,7 @@ export const useGameStore = defineStore({
 			this.board.real[x][y] = this.board.result[x][y] == true
 
 			if (getTrueQttBoard(this.board.real) === getTrueQttBoard(this.board.result)) {
-				// Adicionar pontos
-				// Proximo round
+				//* Adicionar pontos
 
 				this.paused = true
 				this.canPlay = false
@@ -150,6 +165,16 @@ export const useGameStore = defineStore({
 				setTimeout(this.generateBoard, 250)
 
 				setTimeout(this.startRound, 1000)
+			}
+		},
+
+		decreaseLife() {
+			this.life--
+
+			if (this.life <= 0) {
+				clearTimeout(this.timeInterval)
+			} else {
+				this.startRound()
 			}
 		},
 	},
