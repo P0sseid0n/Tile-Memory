@@ -4,6 +4,7 @@ import Moon from './Icons/Moon.vue'
 import Sun from './Icons/Sun.vue'
 import Pause from './Icons/Pause.vue'
 import Play from './Icons/Play.vue'
+import PauseModal from './PauseModal.vue'
 import { useGameStore } from '../stores/game'
 
 const gameStore = useGameStore()
@@ -22,6 +23,7 @@ gameStore.startGame()
 </script>
 
 <template>
+   <PauseModal />
    <header>
       <div>
          <p>Tempo</p>
@@ -33,11 +35,15 @@ gameStore.startGame()
       </div>
    </header>
    <Board />
-   <button @click="toggleTheme()">
+   <button id="toggleTheme" @click="toggleTheme()">
       <Moon v-if="gameStore.theme == 'light'" />
       <Sun v-else />
    </button>
-   <a href="https://p0sseid0n.site/">Made by P0sseid0n</a>
+   <span>
+      <a href="https://p0sseid0n.site/" target="_blank" rel="noopener noreferrer">Made by P0sseid0n</a>
+      <span>•</span>
+      <a href="http://" target="_blank" rel="noopener noreferrer">Open source no github</a>
+   </span>
 </template>
 
 <style lang="scss" scoped>
@@ -80,15 +86,28 @@ button {
    transition: transform 0.2s;
 
    color: var(--principal-color);
+   z-index: 10;
 
    &:hover {
       transform: scale(1.2);
    }
 }
 
-a {
-   text-decoration: none;
-   color: rgb(189, 195, 199);
-   font-weight: 600;
+span {
+   * {
+      color: var(--principal-color);
+      opacity: 0.5;
+      font-size: 16px;
+      font-weight: 600;
+   }
+
+   >span {
+      margin: 0 16px;
+
+   }
+
+   a {
+      text-decoration: none;
+   }
 }
 </style>

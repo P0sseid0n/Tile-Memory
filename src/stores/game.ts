@@ -46,6 +46,18 @@ interface Types {
 	time: number
 }
 
+function getTrueQttBoard(board: Tile[][]) {
+	let qtt = 0
+	board.forEach(row => {
+		row.forEach(tile => {
+			if (tile === true) {
+				qtt++
+			}
+		})
+	})
+	return qtt
+}
+
 export const useGameStore = defineStore({
 	id: 'game',
 	state: (): Types => ({
@@ -69,9 +81,13 @@ export const useGameStore = defineStore({
 			return (this.paused = !this.paused)
 		},
 		startGame() {
+			this.time = 0
 			this.tileActiveColor = colors[Math.floor(Math.random() * colors.length)]
+			this.canPlay = false
+			this.paused = true
+
 			this.generateBoard()
-			this.startRound()
+			setTimeout(this.startRound, 750)
 		},
 
 		generateBoard() {
@@ -85,8 +101,6 @@ export const useGameStore = defineStore({
 				let y = Math.floor(Math.random() * this.tileQtt)
 				this.board.result[x][y] = true
 			}
-
-			console.log(this.board.result)
 		},
 
 		toggleRealBoard(copyResult: boolean) {
@@ -95,51 +109,50 @@ export const useGameStore = defineStore({
 		},
 
 		async startRound() {
-			this.paused = true
 			this.tileActiveColor = colors[Math.floor(Math.random() * colors.length)]
-			this.canPlay = false
 			this.toggleRealBoard(true)
 
 			setTimeout(() => {
 				this.toggleRealBoard(false)
 
-				console.log('Inicia')
-				this.canPlay = true
-				// this.tileActiveColor = '#2ECC71'
-				this.time += 90
+				this.time += 15
 				this.paused = false
-			}, 1000)
+				this.canPlay = true
 
-			// Começar contar o tempo
-			// Permitir que o jogador clique em um valor
+				setInterval(() => {
+					if (this.paused) return
+
+					if (this.time <= 0) return
+
+					this.time -= 1
+				}, 500)
+			}, 1000)
 		},
 
 		activateTile(x: number, y: number) {
 			if (!this.canPlay) return
 
 			this.board.real[x][y] = this.board.result[x][y] == true
+
+			if (getTrueQttBoard(this.board.real) === getTrueQttBoard(this.board.result)) {
+				// Adicionar pontos
+				// Proximo round
+
+				this.paused = true
+				this.canPlay = false
+
+				setTimeout(this.generateBoard, 250)
+
+				setTimeout(this.startRound, 1000)
+			}
 		},
 	},
 
 	getters: {
 		timeDisplay(state) {
-			// Secods to minute
 			const minutes = Math.floor(state.time / 60)
 			const seconds = state.time - minutes * 60
 			return minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0')
 		},
 	},
 })
-
-/*
-   Logica para gerar o tabuleiro
-   1. Gera o tabuleiro como array de arrays
-   2. Seta como true posições aleatórias no tabuleiro (Maximo: (tileQtt * tileQtt) / 2)
-*/
-
-/*
-
-   Campo vazio: false
-   Campo certo: true
-   Campo errado: false
-*/
