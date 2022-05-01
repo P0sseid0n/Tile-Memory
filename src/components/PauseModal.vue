@@ -49,6 +49,7 @@ section {
 
    border-radius: 16px;
 
+
    width: 100%;
    max-width: 320px;
    height: 140px;

@@ -4,6 +4,7 @@ import Moon from './Icons/Moon.vue'
 import Sun from './Icons/Sun.vue'
 import Pause from './Icons/Pause.vue'
 import Play from './Icons/Play.vue'
+import Github from './Icons/Github.vue'
 import PauseModal from './PauseModal.vue'
 import { useGameStore } from '../stores/game'
 
@@ -39,11 +40,9 @@ gameStore.startGame()
       <Moon v-if="gameStore.theme == 'light'" />
       <Sun v-else />
    </button>
-   <span>
-      <a href="https://p0sseid0n.site/" target="_blank" rel="noopener noreferrer">Made by P0sseid0n</a>
-      <span>•</span>
-      <a href="http://" target="_blank" rel="noopener noreferrer">Open source no github</a>
-   </span>
+   <a href="http://" target="_blank" rel="noopener noreferrer">OPEN SOURCE NO GITHUB
+      <Github />
+   </a>
 </template>
 
 <style lang="scss" scoped>
@@ -93,21 +92,17 @@ button {
    }
 }
 
-span {
-   * {
-      color: var(--principal-color);
-      opacity: 0.5;
-      font-size: 16px;
-      font-weight: 600;
-   }
 
-   >span {
-      margin: 0 16px;
+a {
+   color: var(--principal-color);
+   text-decoration: none;
+   opacity: 0.4;
+   font-size: 15px;
+   font-weight: 700;
 
-   }
-
-   a {
-      text-decoration: none;
+   svg {
+      vertical-align: text-bottom;
+      margin-left: 4px;
    }
 }
 </style>

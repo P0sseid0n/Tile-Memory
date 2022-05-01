@@ -44,6 +44,7 @@ interface Types {
 	round: number
 	canPlay: boolean
 	time: number
+	timeInterval: number
 }
 
 function getTrueQttBoard(board: Tile[][]) {
@@ -72,6 +73,7 @@ export const useGameStore = defineStore({
 		round: 1,
 		canPlay: false,
 		time: 0,
+		timeInterval: 0,
 	}),
 	actions: {
 		toggleTheme() {
@@ -109,24 +111,26 @@ export const useGameStore = defineStore({
 		},
 
 		async startRound() {
+			clearTimeout(this.timeInterval)
+
 			this.tileActiveColor = colors[Math.floor(Math.random() * colors.length)]
 			this.toggleRealBoard(true)
 
 			setTimeout(() => {
 				this.toggleRealBoard(false)
 
-				this.time += 15
+				this.time = 2
 				this.paused = false
 				this.canPlay = true
 
-				setInterval(() => {
+				this.timeInterval = setInterval(() => {
 					if (this.paused) return
 
 					if (this.time <= 0) return
 
 					this.time -= 1
-				}, 500)
-			}, 1000)
+				}, 1000)
+			}, 200)
 		},
 
 		activateTile(x: number, y: number) {
