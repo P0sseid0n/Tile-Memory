@@ -4,12 +4,11 @@ import { useGameStore } from './stores/game'
 
 const gameStore = useGameStore()
 
-const theme = gameStore.theme
 
 </script>
 
 <template>
-   <GameScreen />
+   <GameScreen v-if="gameStore.screen == 'game'" />
 </template>
 
 <style lang="scss">

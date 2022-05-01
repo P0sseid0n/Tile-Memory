@@ -45,6 +45,7 @@ interface Types {
 	canPlay: boolean
 	time: number
 	timeInterval: number
+	screen: 'game' | 'menu'
 }
 
 function getTrueQttBoard(board: Tile[][]) {
@@ -74,6 +75,7 @@ export const useGameStore = defineStore({
 		canPlay: false,
 		time: 0,
 		timeInterval: 0,
+		screen: 'game',
 	}),
 	actions: {
 		toggleTheme() {

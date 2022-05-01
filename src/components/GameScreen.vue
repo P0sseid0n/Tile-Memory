@@ -40,7 +40,8 @@ gameStore.startGame()
       <Moon v-if="gameStore.theme == 'light'" />
       <Sun v-else />
    </button>
-   <a href="http://" target="_blank" rel="noopener noreferrer">OPEN SOURCE NO GITHUB
+   <a href="https://github.com/P0sseid0n/Tile-Memory" target="_blank" rel="noopener noreferrer">
+      CÓDIGO ABERTO NO GITHUB
       <Github />
    </a>
 </template>
@@ -102,7 +103,6 @@ a {
 
    svg {
       vertical-align: text-bottom;
-      margin-left: 4px;
    }
 }
 </style>
