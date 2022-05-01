@@ -1,0 +1,11 @@
+:root {
+   --background: #F5F5F5;
+   --principal-color: #000000;
+   --tile: #D7DDE1;
+}
+
+:root[dark-theme] {
+   --background: #1E1E1E;
+   --principal-color: #fff;
+   --tile: #373737;
+}
