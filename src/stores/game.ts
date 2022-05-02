@@ -48,6 +48,7 @@ interface Types {
 	screen: 'game' | 'menu'
 	life: number
 	maxLife: number
+	points: number
 }
 
 /*
@@ -91,6 +92,7 @@ export const useGameStore = defineStore({
 		screen: 'game',
 		life: 3,
 		maxLife: 3,
+		points: 0,
 	}),
 	actions: {
 		toggleTheme() {
@@ -100,6 +102,7 @@ export const useGameStore = defineStore({
 			return (this.paused = !this.paused)
 		},
 		startGame() {
+			this.points = 0
 			this.life = this.maxLife
 			this.time = 0
 			this.tileActiveColor = colors[Math.floor(Math.random() * colors.length)]
@@ -158,6 +161,7 @@ export const useGameStore = defineStore({
 
 			if (getTrueQttBoard(this.board.real) === getTrueQttBoard(this.board.result)) {
 				//* Adicionar pontos
+				this.points += 10
 
 				this.paused = true
 				this.canPlay = false

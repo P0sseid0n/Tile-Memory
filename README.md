@@ -1,5 +1,7 @@
 # Tile Memory
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/85812c9f-5b6e-4a8c-9fce-3a40236bc0bd/deploy-status)](https://app.netlify.com/sites/tile-memory/deploys)
+
 Memorize a posição das cores
 
 ## Screenshots

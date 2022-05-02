@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import Board from './Board.vue'
+
 import Moon from './Icons/Moon.vue'
 import Sun from './Icons/Sun.vue'
 import Pause from './Icons/Pause.vue'
 import Play from './Icons/Play.vue'
 import Github from './Icons/Github.vue'
-import PauseModal from './PauseModal.vue'
 import HeartFull from './Icons/HeartFull.vue'
 import HeartEmpty from './Icons/HeartEmpty.vue'
+
+import PauseModal from './PauseModal.vue'
+import EndModal from './EndModal.vue'
 
 import { useGameStore } from '../stores/game'
 
@@ -21,12 +24,10 @@ function toggleTheme() {
 
 gameStore.startGame()
 
-
-
-
 </script>
 
 <template>
+   <EndModal />
    <PauseModal />
    <header>
       <div id="Life">
@@ -43,7 +44,7 @@ gameStore.startGame()
       </div>
       <div id="Points">
          <p>Pontos</p>
-         <h5>000</h5>
+         <h5>{{ gameStore.points.toString().padStart(3, '0') }}</h5>
       </div>
    </header>
    <Board />
