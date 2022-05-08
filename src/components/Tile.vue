@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useGameStore } from '../stores/game'
 
 const props = defineProps<{
@@ -9,7 +9,6 @@ const props = defineProps<{
 
 const gameStore = useGameStore()
 
-const activeColor = ref(gameStore.canPlay ? gameStore.tileActiveColor : '#E74C3C')
 
 const tileStatus = computed(() => gameStore.board.real[props.posY][props.posX])
 

@@ -7,7 +7,7 @@ const gameStore = useGameStore()
    <div v-if="gameStore.paused && gameStore.canPlay" @click.self="gameStore.togglePaused">
       <section>
          <h1>PAUSADO</h1>
-         <button>SAIR</button>
+         <button @click="gameStore.changeScreen('start')">SAIR</button>
       </section>
    </div>
 </template>

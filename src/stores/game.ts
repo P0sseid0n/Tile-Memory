@@ -45,7 +45,7 @@ interface Types {
 	canPlay: boolean
 	time: number
 	timeInterval: number
-	screen: 'game' | 'menu'
+	screen: 'start' | 'game'
 	life: number
 	maxLife: number
 	points: number
@@ -79,7 +79,7 @@ export const useGameStore = defineStore({
 	state: (): Types => ({
 		theme: 'light',
 		paused: false,
-		tileQtt: 3,
+		tileQtt: 5,
 		tileActiveColor: '',
 		board: {
 			result: [],
@@ -89,19 +89,25 @@ export const useGameStore = defineStore({
 		canPlay: false,
 		time: 0,
 		timeInterval: 0,
-		screen: 'game',
+		screen: 'start',
 		life: 3,
 		maxLife: 3,
 		points: 0,
 	}),
 	actions: {
+		changeScreen(screen: Types['screen']) {
+			this.screen = screen
+		},
 		toggleTheme() {
 			return (this.theme = this.theme === 'light' ? 'dark' : 'light')
 		},
 		togglePaused() {
 			return (this.paused = !this.paused)
 		},
-		startGame() {
+		startGame(options?: { tileQtt: number }) {
+			this.screen = 'game'
+
+			this.tileQtt = options?.tileQtt ?? this.tileQtt
 			this.points = 0
 			this.life = this.maxLife
 			this.time = 0

@@ -8,8 +8,8 @@ const gameStore = useGameStore()
    <div v-if="gameStore.life <= 0">
       <section>
          <h1>VOCÊ PERDEU</h1>
-         <button @click="gameStore.startGame">TENTAR NOVAMENTE</button>
-         <button>SAIR</button>
+         <button @click="gameStore.startGame()">TENTAR NOVAMENTE</button>
+         <button @click="gameStore.changeScreen('start')">SAIR</button>
       </section>
    </div>
 </template>

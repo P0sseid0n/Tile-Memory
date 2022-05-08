@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import Board from './Board.vue'
 
-import Moon from './Icons/Moon.vue'
-import Sun from './Icons/Sun.vue'
+
 import Pause from './Icons/Pause.vue'
 import Play from './Icons/Play.vue'
-import Github from './Icons/Github.vue'
 import HeartFull from './Icons/HeartFull.vue'
 import HeartEmpty from './Icons/HeartEmpty.vue'
 
@@ -16,12 +14,6 @@ import { useGameStore } from '../stores/game'
 
 const gameStore = useGameStore()
 
-function toggleTheme() {
-   document.documentElement.removeAttribute(gameStore.theme + '-theme')
-   const theme = gameStore.toggleTheme()
-   document.documentElement.setAttribute(theme + '-theme', '')
-}
-
 gameStore.startGame()
 
 </script>
@@ -29,36 +21,40 @@ gameStore.startGame()
 <template>
    <EndModal />
    <PauseModal />
-   <header>
-      <div id="Life">
-         <HeartFull v-for="life in gameStore.life" />
-         <HeartEmpty v-for="life in (gameStore.maxLife - gameStore.life)" />
-      </div>
-      <div id="Time">
-         <p>Tempo</p>
-         <h3>{{ gameStore.timeDisplay }}</h3>
-         <button @click="gameStore.togglePaused">
-            <Play v-if="gameStore.paused" />
-            <Pause v-else />
-         </button>
-      </div>
-      <div id="Points">
-         <p>Pontos</p>
-         <h5>{{ gameStore.points.toString().padStart(3, '0') }}</h5>
-      </div>
-   </header>
-   <Board />
-   <button id="toggleTheme" @click="toggleTheme()">
-      <Moon v-if="gameStore.theme == 'light'" />
-      <Sun v-else />
-   </button>
-   <a href="https://github.com/P0sseid0n/Tile-Memory" target="_blank" rel="noopener noreferrer">
-      CÓDIGO ABERTO NO GITHUB
-      <Github />
-   </a>
+   <main id="GameScreen">
+      <header>
+         <div id="Life">
+            <HeartFull v-for="life in gameStore.life" />
+            <HeartEmpty v-for="life in (gameStore.maxLife - gameStore.life)" />
+         </div>
+         <div id="Time">
+            <p>Tempo</p>
+            <h3>{{ gameStore.timeDisplay }}</h3>
+            <button @click="gameStore.togglePaused">
+               <Play v-if="gameStore.paused" />
+               <Pause v-else />
+            </button>
+         </div>
+         <div id="Points">
+            <p>Pontos</p>
+            <h5>{{ gameStore.points.toString().padStart(3, '0') }}</h5>
+         </div>
+      </header>
+      <Board />
+   </main>
 </template>
 
 <style lang="scss" scoped>
+#GameScreen {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: space-between;
+
+}
+
 header {
    display: flex;
    flex-direction: row;
