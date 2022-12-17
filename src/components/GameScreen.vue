@@ -13,9 +13,6 @@ import EndModal from './EndModal.vue'
 import { useGameStore } from '../stores/game'
 
 const gameStore = useGameStore()
-
-gameStore.startGame()
-
 </script>
 
 <template>
