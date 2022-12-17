@@ -15,14 +15,14 @@ const tileQuantity = gameStore.tileQtt
 </script>
 
 <template>
-   <div id="board">
+   <div id="Board">
       <BoardRow v-for="(row, i) in gameStore.board.real.length" :posY="i" />
 
    </div>
 </template>
 
 <style scoped>
-#board {
+#Board {
    display: inline-grid;
    grid-template-columns: repeat(v-bind(tileQuantity), 1fr);
    grid-template-rows: repeat(v-bind(tileQuantity), 1fr);

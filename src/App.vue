@@ -51,7 +51,7 @@ function toggleTheme() {
    width: 100vw;
    height: 100vh;
 
-   padding: 16px 8%;
+   padding: 32px 8%;
 
    display: flex;
    flex-direction: column;
@@ -68,7 +68,7 @@ function toggleTheme() {
    flex-direction: column;
    align-items: center;
    justify-content: space-between;
-   height: 192px;
+   height: 128px;
 
    >button {
       cursor: pointer;

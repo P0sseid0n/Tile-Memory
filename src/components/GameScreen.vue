@@ -21,8 +21,11 @@ const gameStore = useGameStore()
    <main id="GameScreen">
       <header>
          <div id="Life">
-            <HeartFull v-for="life in gameStore.life" />
-            <HeartEmpty v-for="life in (gameStore.maxLife - gameStore.life)" />
+            <p>Chances</p>
+            <div>
+               <HeartFull v-for="life in gameStore.life" />
+               <HeartEmpty v-for="life in (gameStore.maxLife - gameStore.life)" />
+            </div>
          </div>
          <div id="Time">
             <p>Tempo</p>
@@ -71,12 +74,13 @@ header {
       align-items: center;
       width: 80px;
 
-      &#Life {
+      &#Life div {
          flex-direction: row;
 
          >svg {
             width: 24px;
          }
+
       }
 
       &#Time {
@@ -103,7 +107,7 @@ header {
       }
 
       button {
-         margin-top: 4px;
+         margin-top: 16px;
       }
    }
 }
