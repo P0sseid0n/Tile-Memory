@@ -37,7 +37,9 @@ const gameStore = useGameStore()
             <h5>{{ gameStore.points.toString().padStart(3, '0') }}</h5>
          </div>
       </header>
-      <Board />
+      <div id="BoardContainer">
+         <Board />
+      </div>
    </main>
 </template>
 
@@ -134,5 +136,13 @@ a {
    svg {
       vertical-align: text-bottom;
    }
+}
+
+#BoardContainer {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 100%;
+   flex: 1;
 }
 </style>
