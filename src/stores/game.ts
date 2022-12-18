@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { GameController, IState, Tile } from '@/Types'
-import { SpeedGameController } from '@/functions/SpeedGame'
+import SpeedGameController from '@/functions/SpeedGame'
 import { createBoard } from '@/functions/Board'
 
 const colors = [
@@ -98,7 +98,6 @@ export const useGameStore = defineStore({
 			if (!this.canPlay) return
 
 			this.board[x][y] = this.gameController.activateTile(x, y)
-			console.log(this.board[x][y])
 
 			if (!this.board[x][y]) this.decreaseLife()
 

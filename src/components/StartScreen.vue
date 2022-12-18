@@ -7,14 +7,14 @@ const gameStore = useGameStore()
 const tileQtt = ref(3)
 
 function startGame() {
-   gameStore.startGame({ tileQtt: tileQtt.value })
+   gameStore.startGame({ tileQtt: tileQtt.value, game: 'memory' })
 }
 
 </script>
 
 <template>
    <div id="StartScreen">
-      <h1>Tile memory</h1>
+      <h1>Tile Memory</h1>
       <!-- <div>
          <button @click="tileQtt < 5 ? tileQtt++ : null">{{ '<' }}</button>
          <input type="number" :value="tileQtt">

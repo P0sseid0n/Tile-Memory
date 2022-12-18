@@ -1,7 +1,7 @@
 import { GameController, type Tile } from '@/Types'
 import { createBoard } from '@/functions/Board'
 
-export class SpeedGameController extends GameController {
+export default class SpeedGameController extends GameController {
 	private fakeBoard: Tile[][]
 	constructor(private readonly boardSize: number) {
 		super()
