@@ -10,7 +10,7 @@ const props = defineProps<{
 const gameStore = useGameStore()
 
 
-const tileStatus = computed(() => gameStore.board.real[props.posY][props.posX])
+const tileStatus = computed(() => gameStore.board[props.posY][props.posX])
 
 </script>
 

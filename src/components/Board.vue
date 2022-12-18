@@ -1,23 +1,19 @@
 <script setup lang="ts">
-import BoardRow from '@/components/BoardRow.vue'
-import { ref } from 'vue';
+import Tile from './Tile.vue';
+import { ref } from 'vue'
 
 import { useGameStore } from '../stores/game'
 
 const gameStore = useGameStore()
 
 const tileQuantity = gameStore.tileQtt
-
-
-
-
-
 </script>
 
 <template>
    <div id="Board">
-      <BoardRow v-for="(row, i) in gameStore.board.real.length" :posY="i" />
-
+      <template v-for="(row, posY) in gameStore.board.length">
+         <Tile v-for="(tile, i) in gameStore.board[posY]" :posX="i" :posY="posY" />
+      </template>
    </div>
 </template>
 

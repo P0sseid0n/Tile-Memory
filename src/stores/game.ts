@@ -1,4 +1,7 @@
 import { defineStore } from 'pinia'
+import type { GameController, IState, Tile } from '@/Types'
+import { SpeedGameController } from '@/functions/SpeedGame'
+import { createBoard } from '@/functions/Board'
 
 const colors = [
 	'#1ABC9C',
@@ -10,6 +13,7 @@ const colors = [
 	'#27AE60',
 	'#2980B9',
 	'#8E44AD',
+	'#512DA8',
 	'#2C3E50',
 	'#F1C40F',
 	'#E67E22',
@@ -19,83 +23,26 @@ const colors = [
 	'#C0392B',
 ]
 
-function createBoard(size: number) {
-	const board: Tile[][] = []
-	for (let i = 0; i < size; i++) {
-		board.push([])
-		for (let j = 0; j < size; j++) {
-			board[i].push(null)
-		}
-	}
-	return board
-}
-
-type Tile = null | false | true
-
-interface Types {
-	theme: 'light' | 'dark'
-	tileQtt: number
-	paused: boolean
-	tileActiveColor: string
-	board: {
-		result: Tile[][]
-		real: Tile[][]
-	}
-	round: number
-	canPlay: boolean
-	time: number
-	timeInterval: number
-	screen: 'start' | 'game'
-	life: number
-	maxLife: number
-	points: number
-}
-
-/*
-   Facil
-   - maxLife: 5
-
-   Médio
-   - maxLife: 3
-
-   Dificil
-   - maxLife: 2
-*/
-
-function getTrueQttBoard(board: Tile[][]) {
-	let qtt = 0
-	board.forEach(row => {
-		row.forEach(tile => {
-			if (tile === true) {
-				qtt++
-			}
-		})
-	})
-	return qtt
-}
-
 export const useGameStore = defineStore({
 	id: 'game',
-	state: (): Types => ({
+	state: (): IState => ({
 		theme: 'light',
 		paused: false,
-		tileQtt: 5,
+		tileQtt: 4,
 		tileActiveColor: '',
-		board: {
-			result: [],
-			real: [],
-		},
+		board: [],
 		round: 1,
 		canPlay: false,
 		time: 0,
-		timeInterval: 0,
+		endRoundInterval: 0,
 		screen: 'start',
+		game: 'speed',
 		life: 3,
 		maxLife: 3,
 		points: 0,
 	}),
 	actions: {
-		changeScreen(screen: Types['screen']) {
+		changeScreen(screen: IState['screen']) {
 			this.screen = screen
 		},
 		toggleTheme() {
@@ -104,7 +51,7 @@ export const useGameStore = defineStore({
 		togglePaused() {
 			return (this.paused = !this.paused)
 		},
-		startGame(options?: { tileQtt: number }) {
+		startGame(options?: { tileQtt?: number; game?: IState['game'] }) {
 			this.screen = 'game'
 
 			this.tileQtt = options?.tileQtt ?? this.tileQtt
@@ -114,67 +61,58 @@ export const useGameStore = defineStore({
 			this.tileActiveColor = colors[Math.floor(Math.random() * colors.length)]
 			this.canPlay = false
 			this.paused = true
+			this.game = options?.game ?? this.game
 
-			this.generateBoard()
-			setTimeout(this.startRound, 750)
-		},
-
-		generateBoard() {
-			this.board.result = createBoard(this.tileQtt)
-			this.toggleRealBoard(false)
-
-			const maxTileQtt = Math.ceil((this.tileQtt * this.tileQtt) / 2)
-
-			for (let i = 0; i < maxTileQtt; i++) {
-				let x = Math.floor(Math.random() * this.tileQtt)
-				let y = Math.floor(Math.random() * this.tileQtt)
-				this.board.result[x][y] = true
-			}
-		},
-
-		toggleRealBoard(copyResult: boolean) {
-			if (copyResult) this.board.real = this.board.result
-			else this.board.real = this.board.result.map(row => row.map(line => null))
+			this.board = createBoard(this.tileQtt)
+			setTimeout(() => this.startRound(), 750)
 		},
 
 		async startRound() {
-			clearTimeout(this.timeInterval)
+			this.gameController.startRound()
+			clearTimeout(this.endRoundInterval)
 
 			this.tileActiveColor = colors[Math.floor(Math.random() * colors.length)]
-			this.toggleRealBoard(true)
 
-			setTimeout(() => {
-				this.toggleRealBoard(false)
+			await this.gameController.showResultBoard(this.board, newViewBoard => {
+				this.board = newViewBoard
+			})
 
-				this.time = 2
-				this.paused = false
-				this.canPlay = true
+			this.time = 3
+			this.paused = false
+			this.canPlay = true
 
-				this.timeInterval = setInterval(() => {
-					if (this.paused) return
+			this.endRoundInterval = setInterval(() => {
+				if (this.paused) return
 
-					if (this.time <= 0) return this.decreaseLife()
+				if (this.time <= 0) {
+					this.decreaseLife()
+					if (this.life > 0) this.startRound()
+					return
+				}
 
-					this.time -= 1
-				}, 1000)
-			}, 200)
+				this.time -= 1
+			}, 1000)
 		},
 
 		activateTile(x: number, y: number) {
 			if (!this.canPlay) return
 
-			this.board.real[x][y] = this.board.result[x][y] == true
+			this.board[x][y] = this.gameController.activateTile(x, y)
+			console.log(this.board[x][y])
 
-			if (getTrueQttBoard(this.board.real) === getTrueQttBoard(this.board.result)) {
+			if (!this.board[x][y]) this.decreaseLife()
+
+			if (this.gameController.checkResult(this.board)) {
 				//* Adicionar pontos
 				this.points += 10
 
 				this.paused = true
 				this.canPlay = false
 
-				setTimeout(this.generateBoard, 250)
-
-				setTimeout(this.startRound, 1000)
+				setTimeout(() => {
+					this.board = createBoard(this.tileQtt)
+					setTimeout(this.startRound, 1000)
+				}, 500)
 			}
 		},
 
@@ -182,9 +120,7 @@ export const useGameStore = defineStore({
 			this.life--
 
 			if (this.life <= 0) {
-				clearTimeout(this.timeInterval)
-			} else {
-				this.startRound()
+				clearTimeout(this.endRoundInterval)
 			}
 		},
 	},
@@ -194,6 +130,10 @@ export const useGameStore = defineStore({
 			const minutes = Math.floor(state.time / 60)
 			const seconds = state.time - minutes * 60
 			return minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0')
+		},
+
+		gameController(state): GameController {
+			return new SpeedGameController(state.tileQtt)
 		},
 	},
 })
